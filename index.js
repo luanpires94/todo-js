@@ -2,14 +2,14 @@ let listElement = document.querySelector('#app ul');
 let inputElement = document.querySelector('#app input');
 let buttonElement = document.querySelector('#app button');
 
-let tasks = [];
+let tasks = JSON.parse(localStorage.getItem('@listTask')) || [];
 
 function renderTasks() {
     listElement.innerHTML = '';
 
     tasks.map((item) => {
         let liElement = document.createElement('li');
-        let tarefaText = document.createTextNode(item);
+        let taskText = document.createTextNode(item);
 
         let linkElement = document.createElement('a');
         linkElement.setAttribute('href', '#');
@@ -21,15 +21,16 @@ function renderTasks() {
 
         linkElement.setAttribute('onclick', `deleteTask(${position})`)
 
-        listElement.appendChild(tarefaText);
+        listElement.appendChild(taskText);
         liElement.appendChild(linkElement);
         listElement.appendChild(liElement);
     })
 }
+renderTasks();
 
 function addTasks() {
     if (inputElement.value === '') {
-        alert('Digite uma tarefa!')
+        alert('Type a task!')
         return false;
     } else {
         let newTask = inputElement.value;
@@ -39,7 +40,6 @@ function addTasks() {
 
         renderTasks();
         saveData();
-        saveData();
     }
 }
 
@@ -48,8 +48,9 @@ buttonElement.onclick = addTasks;
 function deleteTask(position) {
     tasks.splice(position, 1)
     renderTasks();
+    saveData();
 }
 
 function saveData() {
-    localStorage.setItem('@Tasks', JSON.stringify(tasks));
+    localStorage.setItem('@listTask', JSON.stringify(tasks));
 }
